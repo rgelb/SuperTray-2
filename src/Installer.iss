@@ -1,7 +1,7 @@
 [Setup]
 AppName=SuperTray/2
 AppVerName=SuperTray/2
-AppCopyright=Copyright (C) 1995-2018 Robert Gelb
+AppCopyright=Copyright (C) 1995-2019 Robert Gelb
 AppPublisher=Robert Gelb
 DefaultDirName={userpf}\SuperTray2
 DisableDirPage=yes
