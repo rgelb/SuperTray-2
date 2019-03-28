@@ -11,6 +11,7 @@ DisableReadyPage=yes
 UninstallDisplayIcon={app}\SuperTray2.exe
 OutputBaseFilename=SuperTray2
 AppID=SuperTray/2
+PrivilegesRequired=lowest
 
 [Files]
 Source: "bin\release\SuperTray2.exe"; DestDir: "{app}"
