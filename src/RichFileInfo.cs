@@ -13,32 +13,21 @@ namespace SuperTray2
     {
         public RichFileInfo(string executablePath)
         {
-            // if item is a file, set the startIn folder
-            if (File.Exists(executablePath))
-            {
+
+            if (File.Exists(executablePath)) {
+
                 var fi = new FileInfo(executablePath);
                 this.StartInFolder = fi.DirectoryName;
-            }            
 
-            // obtain name of file/folder
-            if (File.Exists(executablePath))
-            {
                 FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(executablePath);
                 this.Name = fvi.FileDescription;
-            }
-            else if (Directory.Exists(executablePath))
-            {
+
+                this.Icon = Icon.ExtractAssociatedIcon(executablePath);
+
+            } else if (Directory.Exists(executablePath)) {
                 DirectoryInfo di = new DirectoryInfo(executablePath);
                 this.Name = di.Name;
-            }
 
-            // obtain icon
-            if (File.Exists(executablePath))
-            {
-                this.Icon = Icon.ExtractAssociatedIcon(executablePath);
-            }
-            else if (Directory.Exists(executablePath))
-            {
                 this.Icon = DefaultIcons.FolderLarge;
             }
 

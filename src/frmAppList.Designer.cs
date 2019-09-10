@@ -62,7 +62,7 @@
             this.btnSaveChanges});
             this.toolBarForm.Location = new System.Drawing.Point(0, 0);
             this.toolBarForm.Name = "toolBarForm";
-            this.toolBarForm.Size = new System.Drawing.Size(581, 31);
+            this.toolBarForm.Size = new System.Drawing.Size(834, 31);
             this.toolBarForm.TabIndex = 5;
             this.toolBarForm.Text = "toolStrip1";
             // 
@@ -140,7 +140,7 @@
             this.panel1.Location = new System.Drawing.Point(0, 31);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(581, 359);
+            this.panel1.Size = new System.Drawing.Size(834, 469);
             this.panel1.TabIndex = 6;
             // 
             // lvAppList
@@ -152,12 +152,13 @@
             this.chExecutablePath});
             this.lvAppList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvAppList.FullRowSelect = true;
+            this.lvAppList.HideSelection = false;
             this.lvAppList.LargeImageList = this.imgList;
             this.lvAppList.Location = new System.Drawing.Point(0, 0);
             this.lvAppList.Margin = new System.Windows.Forms.Padding(2);
             this.lvAppList.MultiSelect = false;
             this.lvAppList.Name = "lvAppList";
-            this.lvAppList.Size = new System.Drawing.Size(581, 359);
+            this.lvAppList.Size = new System.Drawing.Size(834, 469);
             this.lvAppList.SmallImageList = this.imgList;
             this.lvAppList.TabIndex = 1;
             this.lvAppList.UseCompatibleStateImageBehavior = false;
@@ -186,7 +187,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(581, 390);
+            this.ClientSize = new System.Drawing.Size(834, 500);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.toolBarForm);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

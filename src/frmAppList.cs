@@ -240,6 +240,9 @@ namespace SuperTray2
 
                 lvAppList.Items.Add(item);
             }
+
+            // autosize
+            lvAppList.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
         private void SaveChanges()
