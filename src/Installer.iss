@@ -16,6 +16,7 @@ PrivilegesRequired=lowest
 [Files]
 Source: "bin\release\net9.0-windows\publish\win-x64\SuperTray2.exe"; DestDir: "{app}"
 Source: "bin\release\net9.0-windows\publish\win-x64\SuperTray2.dll"; DestDir: "{app}"
+Source: "bin\release\net9.0-windows\publish\win-x64\SuperTray2.runtimeconfig.json"; DestDir: "{app}"
 Source: "bin\release\net9.0-windows\publish\win-x64\Newtonsoft.Json.dll"; DestDir: "{app}"
 
 [Icons]
