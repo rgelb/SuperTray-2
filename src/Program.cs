@@ -20,6 +20,9 @@ namespace SuperTray2
         [STAThread]
         static void Main()
         {
+            // Enable high DPI support for .NET 9.0 to fix fuzzy fonts
+            Application.SetHighDpiMode(HighDpiMode.SystemAware);
+            
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
