@@ -1,299 +1,300 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace SuperTray2
+namespace SuperTray2;
+
+public partial class frmAppList : Form
 {
-    public partial class frmAppList : Form
+    #region Variables
+
+    private List<ApplicationEntry> appList;
+    private bool listChanged;
+
+    public event EventHandler<List<ApplicationEntry>> SaveChangesRequested = delegate {};
+
+    #endregion
+
+    #region Constructors
+
+    public frmAppList()
     {
-        #region Variables
+        InitializeComponent();
+    }
 
-        private List<ApplicationEntry> appList;
-        private bool listChanged;
+    #endregion
 
-        public event EventHandler<List<ApplicationEntry>> SaveChangesRequested = delegate {};
+    #region Properties
 
-        #endregion
-
-        #region Constructors
-
-        public frmAppList()
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    public List<ApplicationEntry> AppList
+    {
+        get => appList;
+        set
         {
-            InitializeComponent();
-        }
-
-        #endregion
-
-        #region Properties
-
-        public List<ApplicationEntry> AppList
-        {
-            get => appList;
-            set
-            {
-                // clone so that changes are not persisted until Save Changes is clicked
-                appList = Utilities.Clone(value);
-                PopulateListView();
-            }
-        }
-
-        #endregion
-
-        #region Events
-
-        private void btnAddEntry_Click(object sender, EventArgs e)
-        {
-            AddEntry();
-        }
-
-        private void btnEditEntry_Click(object sender, EventArgs e)
-        {
-            // find selected item
-            ListViewItem item = GetSelectedItem();
-            if (item == null)
-            {
-                MessageBox.Show("Select Item");
-                return;
-            }
-
-            var entry = (ApplicationEntry) item.Tag;
-            EditItem(entry);
-        }
-
-        private void btnRemoveEntry_Click(object sender, EventArgs e)
-        {
-            // find selected item
-            ListViewItem item = GetSelectedItem();
-            if (item == null)
-            {
-                MessageBox.Show("Select Item");
-                return;
-            }
-
-            // remove the item in the list
-            var entry = (ApplicationEntry)item.Tag;
-            RemoveEntry(entry);
-        }
-
-        private void btnSaveChanges_Click(object sender, EventArgs e)
-        {
-            SaveChanges();
-        }
-
-        private void btnMoveDownEntry_Click(object sender, EventArgs e)
-        {
-            ListViewItem item = GetSelectedItem();
-            if (item == null)
-            {
-                MessageBox.Show("Select Item");
-                return;
-            }
-
-            // can't move down if only a single item in list
-            if (lvAppList.Items.Count == 1) return;
-
-            // can't move down the last item
-            if (item.Index == lvAppList.Items.Count - 1) return;
-
-            // save index before the list gets repopulated
-            int selectedIndex = item.Index;
-
-            Utilities.Swap(appList, item.Index, item.Index + 1);
+            // clone so that changes are not persisted until Save Changes is clicked
+            appList = Utilities.Clone(value);
             PopulateListView();
+        }
+    }
 
-            lvAppList.Items[selectedIndex + 1].Selected = true;
-            listChanged = true;
+    #endregion
 
+    #region Events
+
+    private void btnAddEntry_Click(object sender, EventArgs e)
+    {
+        AddEntry();
+    }
+
+    private void btnEditEntry_Click(object sender, EventArgs e)
+    {
+        // find selected item
+        ListViewItem item = GetSelectedItem();
+        if (item == null)
+        {
+            MessageBox.Show("Select Item");
+            return;
         }
 
-        private void btnMoveUpEntry_Click(object sender, EventArgs e)
+        var entry = (ApplicationEntry) item.Tag;
+        EditItem(entry);
+    }
+
+    private void btnRemoveEntry_Click(object sender, EventArgs e)
+    {
+        // find selected item
+        ListViewItem item = GetSelectedItem();
+        if (item == null)
         {
-            ListViewItem item = GetSelectedItem();
-            if (item == null)
-            {
-                MessageBox.Show("Select Item");
-                return;
-            }
-
-            // can't move up if only a single item in list
-            if (lvAppList.Items.Count == 1) return;
-            if (item.Index == 0) return;
-
-            // save index before the list gets repopulated
-            int selectedIndex = item.Index;
-
-            Utilities.Swap(appList, item.Index, item.Index - 1);
-            PopulateListView();
-
-            lvAppList.Items[selectedIndex - 1].Selected = true;
-            listChanged = true;
+            MessageBox.Show("Select Item");
+            return;
         }
 
-        private void lvAppList_DragEnter(object sender, DragEventArgs e)
+        // remove the item in the list
+        var entry = (ApplicationEntry)item.Tag;
+        RemoveEntry(entry);
+    }
+
+    private void btnSaveChanges_Click(object sender, EventArgs e)
+    {
+        SaveChanges();
+    }
+
+    private void btnMoveDownEntry_Click(object sender, EventArgs e)
+    {
+        ListViewItem item = GetSelectedItem();
+        if (item == null)
         {
-            e.Effect = DragDropEffects.None;    // by default do not allow
-            bool isFileDrop = e.Data.GetDataPresent(DataFormats.FileDrop);
-
-            if (isFileDrop)
-            {
-                // make sure it's a single file being dropped
-                string [] fileNames = (string[]) e.Data.GetData(DataFormats.FileDrop);
-
-                if (fileNames.Length == 1)
-                {
-                    e.Effect = DragDropEffects.Link;
-                }
-            }
+            MessageBox.Show("Select Item");
+            return;
         }
 
-        private void lvAppList_DragDrop(object sender, DragEventArgs e)
+        // can't move down if only a single item in list
+        if (lvAppList.Items.Count == 1) return;
+
+        // can't move down the last item
+        if (item.Index == lvAppList.Items.Count - 1) return;
+
+        // save index before the list gets repopulated
+        int selectedIndex = item.Index;
+
+        Utilities.Swap(appList, item.Index, item.Index + 1);
+        PopulateListView();
+
+        lvAppList.Items[selectedIndex + 1].Selected = true;
+        listChanged = true;
+
+    }
+
+    private void btnMoveUpEntry_Click(object sender, EventArgs e)
+    {
+        ListViewItem item = GetSelectedItem();
+        if (item == null)
         {
+            MessageBox.Show("Select Item");
+            return;
+        }
+
+        // can't move up if only a single item in list
+        if (lvAppList.Items.Count == 1) return;
+        if (item.Index == 0) return;
+
+        // save index before the list gets repopulated
+        int selectedIndex = item.Index;
+
+        Utilities.Swap(appList, item.Index, item.Index - 1);
+        PopulateListView();
+
+        lvAppList.Items[selectedIndex - 1].Selected = true;
+        listChanged = true;
+    }
+
+    private void lvAppList_DragEnter(object sender, DragEventArgs e)
+    {
+        e.Effect = DragDropEffects.None;    // by default do not allow
+        bool isFileDrop = e.Data.GetDataPresent(DataFormats.FileDrop);
+
+        if (isFileDrop)
+        {
+            // make sure it's a single file being dropped
             string [] fileNames = (string[]) e.Data.GetData(DataFormats.FileDrop);
 
-
-            var appEntry = new ApplicationEntry {ExecutablePath = fileNames[0]};
-
-            var richFileInfo = new RichFileInfo(appEntry.ExecutablePath);
-            appEntry.Name = richFileInfo.Name;
-            appEntry.StartInFolder = richFileInfo.StartInFolder;
-
-            // if the name could not be ascertained, bring up the editor
-            if (string.IsNullOrWhiteSpace(appEntry.Name))
+            if (fileNames.Length == 1)
             {
-                var frm = new frmAppDescription() {ApplicationEntry = appEntry};
-                if (frm.ShowDialog() == DialogResult.OK)
-                {
-                    AppList.Add(appEntry);
-                    PopulateListView();
-                    listChanged = true;
-                }
+                e.Effect = DragDropEffects.Link;
             }
-            else
+        }
+    }
+
+    private void lvAppList_DragDrop(object sender, DragEventArgs e)
+    {
+        string [] fileNames = (string[]) e.Data.GetData(DataFormats.FileDrop);
+
+
+        var appEntry = new ApplicationEntry {ExecutablePath = fileNames[0]};
+
+        var richFileInfo = new RichFileInfo(appEntry.ExecutablePath);
+        appEntry.Name = richFileInfo.Name;
+        appEntry.StartInFolder = richFileInfo.StartInFolder;
+
+        // if the name could not be ascertained, bring up the editor
+        if (string.IsNullOrWhiteSpace(appEntry.Name))
+        {
+            var frm = new frmAppDescription() {ApplicationEntry = appEntry};
+            if (frm.ShowDialog() == DialogResult.OK)
             {
                 AppList.Add(appEntry);
                 PopulateListView();
                 listChanged = true;
             }
         }
-
-        private void lvAppList_MouseDoubleClick(object sender, MouseEventArgs e)
+        else
         {
-            ListViewHitTestInfo info = lvAppList.HitTest(e.X, e.Y);
-            ListViewItem item = info.Item;
+            AppList.Add(appEntry);
+            PopulateListView();
+            listChanged = true;
+        }
+    }
 
-            if (item != null)
+    private void lvAppList_MouseDoubleClick(object sender, MouseEventArgs e)
+    {
+        ListViewHitTestInfo info = lvAppList.HitTest(e.X, e.Y);
+        ListViewItem item = info.Item;
+
+        if (item != null)
+        {
+            var appEntry = (ApplicationEntry) item.Tag;
+            EditItem(appEntry);
+        }
+    }
+
+    private void frmAppList_FormClosing(object sender, FormClosingEventArgs e)
+    {
+        if (listChanged)
+        {
+            DialogResult result = MessageBox.Show("Would you like to save the changes?", "Question", 
+                MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+            switch (result)
             {
-                var appEntry = (ApplicationEntry) item.Tag;
-                EditItem(appEntry);
+                case DialogResult.Cancel:
+                    e.Cancel = true;
+                    break;
+                case DialogResult.Yes:
+                    SaveChanges();
+                    break;
+                case DialogResult.No:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
+    }
 
-        private void frmAppList_FormClosing(object sender, FormClosingEventArgs e)
+    #endregion
+
+    #region Private Methods
+
+    private void PopulateListView()
+    {
+        lvAppList.Items.Clear();
+        imgList.Images.Clear();
+
+        foreach (var entry in appList)
         {
-            if (listChanged)
-            {
-                DialogResult result = MessageBox.Show("Would you like to save the changes?", "Question", 
-                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            var item = new ListViewItem(entry.Name);
+            item.SubItems.Add(entry.ExecutablePath);
+            item.Tag = entry;
 
-                switch (result)
-                {
-                    case DialogResult.Cancel:
-                        e.Cancel = true;
-                        break;
-                    case DialogResult.Yes:
-                        SaveChanges();
-                        break;
-                    case DialogResult.No:
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+            try
+            {
+                var richFileInfo = new RichFileInfo(entry.ExecutablePath);
+
+                imgList.Images.Add (richFileInfo.Icon32);
+                item.ImageIndex = imgList.Images.Count - 1;
             }
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        private void PopulateListView()
-        {
-            lvAppList.Items.Clear();
-            imgList.Images.Clear();
-
-            foreach (var entry in appList)
+            catch
             {
-                var item = new ListViewItem(entry.Name);
-                item.SubItems.Add(entry.ExecutablePath);
-                item.Tag = entry;
-
-                try
-                {
-                    var richFileInfo = new RichFileInfo(entry.ExecutablePath);
-
-                    imgList.Images.Add (richFileInfo.Icon32);
-                    item.ImageIndex = imgList.Images.Count - 1;
-                }
-                catch
-                {
-                    // ignore - nothing to be done
-                }
-
-                lvAppList.Items.Add(item);
+                // ignore - nothing to be done
             }
 
-            // autosize
-            lvAppList.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            lvAppList.Items.Add(item);
         }
 
-        private void SaveChanges()
+        // autosize
+        lvAppList.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+    }
+
+    private void SaveChanges()
+    {
+        var clonedList = Utilities.Clone(appList);
+        SaveChangesRequested(this, clonedList);
+        listChanged = false;
+    }
+
+    private ListViewItem GetSelectedItem()
+    {
+        var selectedItems = lvAppList.SelectedItems;
+        return selectedItems.Count == 1 ? selectedItems[0] : null;
+    }
+
+    private void AddEntry()
+    {
+        var frm = new frmAppDescription();
+        if (frm.ShowDialog() == DialogResult.OK)
         {
-            var clonedList = Utilities.Clone(appList);
-            SaveChangesRequested(this, clonedList);
-            listChanged = false;
-        }
+            appList.Add(frm.ApplicationEntry);
 
-        private ListViewItem GetSelectedItem()
-        {
-            var selectedItems = lvAppList.SelectedItems;
-            return selectedItems.Count == 1 ? selectedItems[0] : null;
-        }
-
-        private void AddEntry()
-        {
-            var frm = new frmAppDescription();
-            if (frm.ShowDialog() == DialogResult.OK)
-            {
-                appList.Add(frm.ApplicationEntry);
-
-                // repaint the list view
-                PopulateListView();
-
-                listChanged = true;
-            }
-        }
-
-        private void EditItem(ApplicationEntry appEntry)
-        {
-            var frm = new frmAppDescription() {ApplicationEntry = appEntry};
-            if (frm.ShowDialog() == DialogResult.OK)
-            {
-                // repaint the list view
-                PopulateListView();
-
-                listChanged = true;
-            }
-        }
-
-        private void RemoveEntry(ApplicationEntry entry)
-        {
-            appList.Remove(entry);
-
+            // repaint the list view
             PopulateListView();
 
             listChanged = true;
         }
-
-        #endregion
-
     }
+
+    private void EditItem(ApplicationEntry appEntry)
+    {
+        var frm = new frmAppDescription() {ApplicationEntry = appEntry};
+        if (frm.ShowDialog() == DialogResult.OK)
+        {
+            // repaint the list view
+            PopulateListView();
+
+            listChanged = true;
+        }
+    }
+
+    private void RemoveEntry(ApplicationEntry entry)
+    {
+        appList.Remove(entry);
+
+        PopulateListView();
+
+        listChanged = true;
+    }
+
+    #endregion
+
 }

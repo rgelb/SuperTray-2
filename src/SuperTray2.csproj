@@ -7,14 +7,14 @@
     <ApplicationIcon>Resources\s3_128_F6f_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="..\..\..\AppData\Roaming\SuperTray\appList.json" Link="appList.json" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="ToolStripExtended.cs">
       <SubType>Component</SubType>
     </Compile>
-    <None Include="..\..\..\..\AppData\Roaming\SuperTray\appList.json">
-      <Link>appList.json</Link>
-    </None>
   </ItemGroup>
 </Project>

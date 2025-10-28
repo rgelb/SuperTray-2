@@ -1,7 +1,7 @@
 [Setup]
 AppName=SuperTray/2
 AppVerName=SuperTray/2
-AppCopyright=Copyright (C) 1995-2019 Robert Gelb
+AppCopyright=Copyright (C) 1995-2025 Robert Gelb
 AppPublisher=Robert Gelb
 DefaultDirName={userpf}\SuperTray2
 DisableDirPage=yes
@@ -14,9 +14,9 @@ AppID=SuperTray/2
 PrivilegesRequired=lowest
 
 [Files]
-Source: "bin\release\SuperTray2.exe"; DestDir: "{app}"
-Source: "bin\release\SuperTray2.exe.config"; DestDir: "{app}"
-Source: "bin\release\Newtonsoft.Json.dll"; DestDir: "{app}"
+Source: "bin\release\net9.0-windows\publish\win-x64\SuperTray2.exe"; DestDir: "{app}"
+Source: "bin\release\net9.0-windows\publish\win-x64\SuperTray2.dll"; DestDir: "{app}"
+Source: "bin\release\net9.0-windows\publish\win-x64\Newtonsoft.Json.dll"; DestDir: "{app}"
 
 [Icons]
 Name: "{userstartup}\SuperTray2"; Filename: "{app}\SuperTray2.exe"; 
